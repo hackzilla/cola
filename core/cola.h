@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SYMSZ	16			/* SYMBOL SIZE */
-#define PRGSZ	65536			/* PROGRAM SIZE */
-#define STKSZ	256			/* STACK SIZE */
-#define STRSZ	4096			/* STRING TABLE SIZE */
-#define VARS	512			/* VARIABLE COUNT */
-#define LOCS	8			/* LOCAL COUNT */
+#define SYMSZ	16			// symbol size
+#define PRGSZ	65536		// program size
+#define STKSZ	256			// stack size
+#define STRSZ	4096		// string table size
+#define VARS	512			// variable count
+#define LOCS	8			  // local count
 
 #define COLA_VERSION 0.1
 
@@ -17,9 +17,9 @@ typedef ptrdiff_t	Val;		/* SIGNED INT/POINTER */
 typedef int		(*Code)();	/* BYTE-CODE */
 
 enum {	NAME=1,NUMBER,STRING,LP,RP,COMMA,ADD,SUBS,MUL,DIV,MOD,
-	EQ,LT,GT, NE,LE,GE,AND,OR,FORMAT,SUB,END,RETURN,LOCAL,
+	EQ,LT,GT, NE,LE,GE,AND,OR,PRINT,SUB,END,RETURN,LOCAL,
 	WHILE,FOR,TO,IF,ELSE,THEN,DIM,UBOUND,BYE,BREAK,RESUME };
-char	*kwd[]={ "AND","OR","FORMAT","SUB","END","RETURN","LOCAL","WHILE",
+char	*kwd[]={ "AND","OR","PRINT","SUB","END","RETURN","LOCAL","WHILE",
 	"FOR","TO","IF","ELSE","THEN","DIM","UBOUND","BYE","BREAK","RESUME",0 };
 
 char	lbuf[256],tokn[SYMSZ],*lp;	/* LEXER STATE */
@@ -59,7 +59,7 @@ NUMBER_() { *--sp=PCV; STEP; }
 LOAD_() { *--sp=value[PCV]; STEP; }
 STORE_() { value[PCV]=*sp++; STEP; }
 ECHO_() { printf("%d\n",*sp++); }
-FORMAT_() { char *f; Val n=PCV, *ap=(sp+=n)-1;
+PRINT_() { char *f; Val n=PCV, *ap=(sp+=n)-1;
 	for (f=stab + *sp++; *f; f++)
 		if (*f=='%') printf("%d", (int)*ap--);
 		else if (*f=='$') printf("%s", (char*)*ap--);
@@ -129,7 +129,7 @@ read() {	/* READ TOKEN */
 	} else if (*lp=='"' && lp++) {	/* STRING */
 		for (p=stabp; *lp && *lp!='"'; ) *stabp++=*lp++;
 		return *stabp++=0, lp++, tokv=p-stab, tok=STRING;
-	} else	return bad("BAD TOKEN");
+	} else	return bad("UNKNOWN TOKEN");
 }
 want(int type) { return !(ungot=read()!=type); }
 need(int type) { if (!want(type)) bad("SYNTAX ERROR"); }
@@ -173,10 +173,10 @@ BIN(expr,AND,OR,relation)
 stmt() {	/* STATEMENT */
 	int	n,var;
 	switch (read()) {
-	case FORMAT:
+	case PRINT:
 		need(STRING), inst(NUMBER_, tokv);
 		n=0; if (want(COMMA)) LIST(expr(); n++);
-		inst(FORMAT_, n);
+		inst(PRINT_, n);
 		break;
 	case SUB:	/* CSTK: {SUB,INDEX,JMP} */
 		if (!compile) bad("SUB MUST BE COMPILED");

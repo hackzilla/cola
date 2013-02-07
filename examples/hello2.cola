@@ -1,5 +1,1 @@
-# optionally, you can just include 'END' before
-# the program ends
-
-FORMAT "Hello world!"
-END
+PRINT "Hello world!"
