@@ -1,0 +1,6 @@
+# create a subroutine that returns "hello NAME"
+SUB HELLO
+  FORMAT "Hello world!"
+END SUB
+
+HELLO
