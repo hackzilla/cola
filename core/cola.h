@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
 
-=======
->>>>>>> 817c48cf3adf34f3d25f877f33d199a3de2a7b50
 #define SYMSZ	16			/* SYMBOL SIZE */
 #define PRGSZ	65536			/* PROGRAM SIZE */
 #define STKSZ	256			/* STACK SIZE */
@@ -14,11 +11,8 @@
 #define VARS	512			/* VARIABLE COUNT */
 #define LOCS	8			/* LOCAL COUNT */
 
-<<<<<<< HEAD
-float colaversion() { return 0.1000; } /* CURRENT COLA VERSION */
+#define COLA_VERSION 0.1
 
-=======
->>>>>>> 817c48cf3adf34f3d25f877f33d199a3de2a7b50
 typedef ptrdiff_t	Val;		/* SIGNED INT/POINTER */
 typedef int		(*Code)();	/* BYTE-CODE */
 
@@ -274,12 +268,9 @@ stmt() {	/* STATEMENT */
 	if (!want(0))		bad("TOKENS AFTER STATEMENT");
 }
 interp(FILE *sf) {	/* INTERPRETER LOOP */
-<<<<<<< HEAD
   if (sf==stdin)
-    printf("** REPL for Cola v%g\n", colaversion());
+    printf("** REPL for Cola v%g\n", COLA_VERSION);
 
-=======
->>>>>>> 817c48cf3adf34f3d25f877f33d199a3de2a7b50
 	for (;;) {
 		int code=setjmp(trap);			/* RETURN ON ERROR */
 		if (code==1 && sf!=stdin) return 1;	/* FILE SYNTAX ERROR */
@@ -287,13 +278,7 @@ interp(FILE *sf) {	/* INTERPRETER LOOP */
 		if (code==3) pc=opc?opc:pc, cpc=ipc;	/* "BREAK" */
 		if (code==4) return 0;			/* "BYE" */
 		for (;;) {
-<<<<<<< HEAD
-      /* boot up REPL */
-			if (sf==stdin) printf("%d> ",lnum+1,stdout);
-
-=======
-			if (sf==stdin) printf("%d> ",lnum+1,stdout);
->>>>>>> 817c48cf3adf34f3d25f877f33d199a3de2a7b50
+			if (sf==stdin) printf("%d> ",lnum+1,stdout); /* INTERACTIVE REPL */
 			if (!fgets(lp=lbuf,sizeof lbuf,sf)) break;
 			lnum++, ungot=0, stmt();	/* PARSE AND COMPILE */
 			if (compile) continue;		/* CONTINUE COMPILING */
