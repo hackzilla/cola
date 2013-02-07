@@ -8,6 +8,8 @@ Welcome to Cola, my little BASIC interpreter based on the original BASIC syntax,
 
 Cola doesn't use anything special, and will basically run on any OS with any compiler (just don't try using some 1985 compiler and you should be fine).
 
+By the way, the main interpreter was pretty much completely stolen from [this guy's code](https://github.com/jwillia3/BASIC). It's an amazing interpreter, so I really recommend checking it out!
+
 ## Building
 
 Just clone the repo and run `make`, and that's basically it:
