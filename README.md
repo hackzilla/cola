@@ -1,37 +1,103 @@
 # Cola
 
-Because BASIC was already taken.
+Because 'BASIC' was already taken.
 
-## WAITWUT?
+## What?
 
-BASICally (see what I did there) Cola is my shamelessly-stolen BASIC interpreter from [this guy's epic code](https://github.com/jwillia3/BASIC). The interpreter itself is extremely small, and uses such standard C you can pretty much run it anywhere (with pretty much any compiler). Cola is great for embedding, as it's full interpreter is only about 300 lines of code.
+Welcome to Cola, my little BASIC interpreter based on the original BASIC syntax, but refactored with some extra goodies and power in a < 300 line interpreter written in C.
+
+Cola doesn't use anything special, and will basically run on any OS with any compiler (just don't try using some 1985 compiler and you should be fine).
 
 ## Building
 
-Nothing special... just run:
+Just clone the repo and run `make`, and that's basically it:
 
-```sh
-$ make install
-# or just
+```
+$ git clone https://github.com/beakr/cola.git
+$ cd cola
 $ make
 ```
 
-## Usage
+## Syntax
 
-### Using the executable
+Cola code works a lot like QBASIC on old Microsoft computers (but a lot less manual and lots of other more-epic things).
 
-Once you `make` Cola's interpreter, you'll find the `cola` executable in your directory. Here's the BASIC (ok, no more puns) usage:
+### Comments
 
-```sh
-# If you've got cola in your ~/bin/ don't prepend './'
-
-# run the cola REPL
-$ ./cola
-
-# run a file
-$ ./cola name.cola
+```
+' Comments can be created with the single quote character just like
+' QBASIC and other BASIC dialects
 ```
 
-## Writing Cola Code
+### Functions
 
-It's best you check out the `examples/` directory, but if you're really interested in using Cola, I've got a simple tutorial on [my blog]().
+```
+# Comments can also be created with an octothorpe as many other
+# modern languages use
+
+# You can define simple functions (in BASIC they're known as "subroutines") using the SUB keyword.
+# Don't forget that Cola understands keywords in lowercase too, but the uppercase gives it a more
+# "retro effect".
+#
+# All statements in Cola end with "END [KEYWORD NAME]".
+SUB MULTBYEIGHT NUM
+  # you can evaluate simple math expressions
+  # by preceding lines with '>'
+  > NUM*8
+END SUB
+
+# Now we can use the function we defined above to multiply
+# the number 8 by 8
+MULTBYEIGHT 8
+#=> 64
+```
+
+### Math
+
+```
+# As shown above, we can do all the basic math expressions using '>'
+
+> 7+2 # add
+> 8-6 # subtract
+> 6*6 # multiply
+> 8/2 # divide
+
+#=>
+# 9
+# 2
+# 36
+# 4
+```
+
+### Variables
+
+```
+# Variables can be named using any character from a-z
+HELLO = "hello"
+x = 2
+COWSOUND = "moo"
+```
+
+### Strings
+
+```
+# Strings can be made using double quotes as usual.
+# You can use PRINT to display a string.
+PRINT "Welcome to the jungle!"
+
+# Strings can also be interpolated, so
+# you can add variables to your strings.
+#
+# '%' interpolates a number into your string.
+x = 1
+y = 2
+z = 3
+PRINT "%-%-%", x, y, z
+#=> 1-2-3
+
+# You can interpolate strings into other strings too, just use '$'
+x = "Hello "
+y = "world!"
+PRINT "$$", x, y
+#=> Hello world!
+```
