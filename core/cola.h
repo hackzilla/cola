@@ -59,12 +59,14 @@ NUMBER_() { *--sp=PCV; STEP; }
 LOAD_() { *--sp=value[PCV]; STEP; }
 STORE_() { value[PCV]=*sp++; STEP; }
 ECHO_() { printf("%d\n",*sp++); }
-PRINT_() { char *f; Val n=PCV, *ap=(sp+=n)-1;
+PRINT_() {
+  char *f; Val n=PCV, *ap=(sp+=n)-1;
 	for (f=stab + *sp++; *f; f++)
-		if (*f=='%') printf("%d", (int)*ap--);
-		else if (*f=='$') printf("%s", (char*)*ap--);
+    // interpolation magic
+		if (*f=='%') printf("%d", (int)*ap--); // interpolate integer
+		else if (*f=='$') printf("%s", (char *)*ap--); // interpolate string
 		else putchar(*f);
-	putchar('\n'); STEP;
+	putchar('\n'); STEP; // automatically append \n
 }
 ADD_() { A+=B; sp++; STEP; };
 SUBS_() { A-=B; sp++; STEP; };
@@ -114,7 +116,7 @@ read() {	/* READ TOKEN */
 	char *p,*d,**k, *pun="(),+-*/\\=<>", *dub="<><==>";
 	if (ungot) return ungot=0, tok;	/* UNGOT PREVIOUS */
 	while (isspace(*lp)) lp++;	/* SKIP SPACE */
-	if (!*lp || *lp=='#') return tok=0; /* END OF LINE */
+	if (!*lp || *lp=='#' || *lp=='\'') return tok=0; /* end of line (also makes # or ' into a comment) */
 	if (isdigit(*lp))		/* NUMBER */
 		return tokv=strtol(lp,&lp,0), tok=NUMBER;
 	if ((p=strchr(pun,*lp)) && lp++) { /* PUNCTUATION */
